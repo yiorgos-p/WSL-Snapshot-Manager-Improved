@@ -78,6 +78,7 @@ def list_distros():
 
 
 def list_backups(backup_dir):
+    backup_dir = os.path.normpath(backup_dir)
     if not os.path.exists(backup_dir):
         os.makedirs(backup_dir)
     backups = [f for f in os.listdir(backup_dir) if f.endswith('.tar.gz')]
@@ -85,7 +86,11 @@ def list_backups(backup_dir):
 
 def export_distro():
     config = load_config()
-    backup_dir = config['backup_dir']
+    backup_dir = os.path.normpath(config['backup_dir'])
+    
+    # Ensure backup directory exists
+    if not os.path.exists(backup_dir):
+        os.makedirs(backup_dir)
 
     distros = list_distros()
     if not distros:
@@ -105,10 +110,8 @@ def export_distro():
     choice = int(input("Select a distro to export: ")) - 1
     selected_distro, state, version, is_default = distros[choice]
 
-    # TODO: if the distro is not stopped, prompt the user to close it first.
-
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    backup_file = os.path.join(backup_dir, f"{selected_distro}-{timestamp}.tar")
+    backup_file = os.path.normpath(os.path.join(backup_dir, f"{selected_distro}-{timestamp}.tar"))
     compressed_backup_file = backup_file + ".gz"
 
     print(colored(f"Exporting {selected_distro} to {compressed_backup_file}...", "cyan"))
@@ -126,7 +129,7 @@ def export_distro():
 
 def import_distro():
     config = load_config()
-    backup_dir = config['backup_dir']
+    backup_dir = os.path.normpath(config['backup_dir'])
 
     backups = list_backups(backup_dir)
     if not backups:
@@ -141,10 +144,22 @@ def import_distro():
     selected_backup = backups[choice]
 
     new_distro_name = input("Enter a name for the new distro: ")
-    default_install_location = os.path.expanduser(f"~/wsl_installs/{new_distro_name}")
-    install_location = input(f"Enter the install location (default: {default_install_location}): ") or default_install_location
+    default_install_location = os.path.normpath(os.path.expanduser(f"~/wsl_installs/{new_distro_name}"))
+    install_location_input = input(f"Enter the install location (default: {default_install_location}): ")
+    
+    # Strip quotes and normalize install location
+    if install_location_input:
+        install_location = os.path.normpath(os.path.abspath(
+            os.path.expanduser(install_location_input.strip().strip('"').strip("'"))
+        ))
+    else:
+        install_location = default_install_location
+    
+    # Ensure install directory exists
+    if not os.path.exists(install_location):
+        os.makedirs(install_location)
 
-    compressed_backup_path = os.path.join(backup_dir, selected_backup)
+    compressed_backup_path = os.path.normpath(os.path.join(backup_dir, selected_backup))
     extracted_backup_path = compressed_backup_path[:-3]  # remove .gz
 
     print(colored("Decompressing backup...", "cyan"))
@@ -164,15 +179,21 @@ def import_distro():
 
 def set_backup_dir():
     new_dir = input("Enter new backup directory path: ")
+    # Strip quotes and whitespace
+    new_dir = new_dir.strip().strip('"').strip("'")
+    # Expand user home directory and normalize path
+    new_dir = os.path.normpath(os.path.abspath(os.path.expanduser(new_dir)))
+    # Ensure the directory exists
+    if not os.path.exists(new_dir):
+        os.makedirs(new_dir)
     config = load_config()
-    config['backup_dir'] = os.path.expanduser(new_dir)
+    config['backup_dir'] = new_dir
     save_config(config)
     print(colored(f"Backup directory set to {new_dir}", "green"))
 
 def main_menu():
-    config = load_config()
-
     while True:
+        config = load_config()
         print(colored("\nWSL Snapshot Manager", "yellow"))
         print("---\nThe default export(backup) directory is " + colored(config['backup_dir'], "green") + "\n---\n");
         print("1. Export a WSL distro")
