@@ -1,28 +1,102 @@
-# DISCLAIMER
-
-This tool has not been tested properly and I am sure that it raises a lot of errors. So, if you encounter any bugs or errors, please feel free to open an issue, or fork and fix it yourself if you feel adventurous. Thanks for your feedback!
-
 # 🐧 WSL Snapshot Manager
 
-**WSL Snapshot Manager** is a simple, interactive CLI tool to **backup** and **restore** your WSL (Windows Subsystem for Linux) distros easily.
+> ⚠️ **Two Versions Available** - Choose the one that fits your needs!
 
-It supports:
+This repository contains **two versions** of WSL Snapshot Manager:
 
-- 📦 Exporting WSL distros into compressed `.tar.gz` snapshots
-- 🛠 Importing snapshots back into WSL
-- 📂 Default, customizable backup directory
-- 🎨 Colored output for better UX
-- 🔄 Progress spinner during operations
-- ⚡ Auto-detects WSL1 or WSL2 versions
+| Version | Description | Best For |
+|---------|-------------|----------|
+| **[Basic (Fixed)](./README_BASIC.md)** | Original tool with critical bug fixes | Users who want the original functionality with path handling fixed |
+| **[Expanded](./README_EXPANDED.md)** | Enhanced version with new features | Power users who want backup management, cloning, bulk export, and metadata |
 
 ---
 
-## 🚀 Features
+## 🔧 Basic Version (Bug Fixes Only)
 
-- Simple interactive menu
-- Automatic `.tar.gz` compression to save space
-- Configuration for default backup folder
-- Supports both WSL1 and WSL2 distros
+**File:** `wsl_snapshot_manager.py`
+
+✅ **Fixed Issues:**
+- Path handling with quotes and mixed separators
+- Automatic directory creation
+- Path normalization for Windows/Unix paths
+- Config reloading in main menu
+
+✨ **Features:**
+- Export WSL distros to compressed `.tar.gz`
+- Import distros from backups
+- Customizable backup directory
+- Simple, clean interface
+
+**[→ View Basic Version Documentation](./README_BASIC.md)**
+
+---
+
+## 🚀 Expanded Version (New Features)
+
+**File:** `wsl_snapshot_manager_expanded.py`
+
+Everything from Basic version, **PLUS:**
+
+✨ **New Features:**
+- 📊 **Export all distros** at once (bulk backup)
+- 🔄 **Clone distros** instantly (one-click duplication)
+- 🗂️ **Backup management** (list, view, delete, rename)
+- 📝 **Backup metadata** with notes and automatic info
+
+**[→ View Expanded Version Documentation](./README_EXPANDED.md)**
+
+---
+
+## 📦 Quick Start
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/wsl-snapshot-manager.git
+cd wsl-snapshot-manager
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the version you prefer:
+python wsl_snapshot_manager.py      # Basic version
+# OR
+python wsl_snapshot_manager_expanded.py   # Expanded version
+```
+
+---
+
+## 🎯 Which Version Should I Use?
+
+### Choose **Basic** if you:
+- ✅ Want the original tool with bugs fixed
+- ✅ Prefer simplicity and minimal features
+- ✅ Just need basic export/import functionality
+- ✅ Want the fastest, lightest version
+
+### Choose **Expanded** if you:
+- ✅ Manage multiple WSL distros regularly
+- ✅ Need to clone distros for testing
+- ✅ Want to organize and manage backup library
+- ✅ Like adding notes to remember what each backup is for
+- ✅ Prefer bulk operations (export all at once)
+
+---
+
+## 📋 Feature Comparison
+
+| Feature | Basic | Expanded |
+|---------|-------|----------|
+| Export single distro | ✅ | ✅ |
+| Import distro | ✅ | ✅ |
+| Path bug fixes | ✅ | ✅ |
+| Export all distros | ❌ | ✅ |
+| Clone distro | ❌ | ✅ |
+| Backup management | ❌ | ✅ |
+| Metadata & notes | ❌ | ✅ |
+| List backups | ❌ | ✅ |
+| Delete/rename backups | ❌ | ✅ |
 
 ---
 
@@ -30,71 +104,29 @@ It supports:
 
 - **Python 3.7+**
 - **Windows 10/11** with WSL installed
-- Python packages listed in `requirements.txt`
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+- Dependencies: `pip install -r requirements.txt`
 
 ---
 
-## 📦 Installation
+## 🤝 Contributing
 
-Clone the repository:
-
-```bash
-git clone https://github.com/ekinakkaya/wsl-snapshot-manager.git
-cd wsl-snapshot-manager
-```
-
-Install dependencies & run the tool
-
-```bash
-pip install -r requirements.txt
-python wsl_snapshot.py
-```
-
----
-
-## 📋 Usage
-
-You will see an interactive menu:
-
-```
-WSL Snapshot Manager
-1. Export a WSL distro
-2. Import a WSL distro
-3. Set backup directory
-4. Exit
-```
-
-- **Export a Distro**: Select an installed WSL distro to create a compressed backup.
-- **Import a Distro**: Select a saved backup to restore it.
-- **Set Backup Directory**: Change where your backups are saved.
-
----
-
-## 📁 Default Locations
-
-- **Backup storage**:  
-  `~/wsl_backups/` _(can be changed in settings)_
-
-- **Imported distros**:  
-  Default install location: `~/wsl_installs/<distro_name>/`
-
----
-
-## 🧹 Extra Notes
-
-- Backups are compressed into `.tar.gz` automatically.
-- Temporary files are cleaned up after importing.
-- Compatible with both WSL1 and WSL2 distros.
+Contributions are welcome! Both versions are maintained:
+- **Bug fixes** → Submit to both versions
+- **New features** → Submit to expanded version
+- **Documentation** → Update relevant README
 
 ---
 
 ## 🛡️ License
 
-This project is licensed under the **MIT License**.  
-Feel free to use, modify, and contribute!
+MIT License - See [LICENSE](./LICENSE) file for details.
+
+Original work by Ekin Akkaya  
+Bug fixes and expanded features by me
+
+---
+
+## 📝 Credits
+
+- **Original Author:** [Ekin Akkaya](https://github.com/ekinakkaya)
+- **Bug Fixes & Expanded Version:** [Yiorgos Pinis](https://github.com/yiorgos-p)
